@@ -88,6 +88,12 @@ class Column extends React.Component {
 class DeleteButton extends React.Component {
   onClick() {
     this.props.delete.call(null, this.props.uuid);
+
+    axios({
+      url: "diet/me",
+      method: "delete",
+      data: {},
+    });
   }
 
   render() {
@@ -121,7 +127,7 @@ class AddButton extends React.Component {
     }
     const data = this.props.newData;
     const date = this.props.getDate();
-    //console.log(date, data);
+    console.log(date, data);
 
     axios({
       url: "diet/me",
@@ -144,6 +150,17 @@ class AddButton extends React.Component {
     //   });
   }
 
+  // constructor(props) {
+  //   super(props);
+  //   this.sum = this.sum.bind(this);
+  //   this.onClick = this.onClick.bind(this);
+  // }
+
+  // doSomthing = (e) => {
+  //   this.sum();
+  //   this.onClick();
+  // };
+
   render() {
     return (
       <button
@@ -155,6 +172,12 @@ class AddButton extends React.Component {
         Add
       </button>
     );
+  }
+}
+
+class Kcal extends React.Component {
+  render() {
+    return this.props.칼로리;
   }
 }
 
@@ -172,6 +195,19 @@ class Row extends React.Component {
 }
 
 class Table extends React.Component {
+  // state = {
+  //   num1: 0,
+  //   num2: 0,
+  //   result: 0,
+  // };
+
+  // sum() {
+  //   this.setState({
+  //     num1: 0,
+  //     result: 1,
+  //   });
+  // }
+
   render() {
     return (
       <table className="table">
@@ -203,6 +239,16 @@ class Table extends React.Component {
               />
             );
           })}
+          <th scope="col" style={{ width: "30%" }}>
+            총 칼로리
+          </th>
+          <th scope="col" style={{ width: "30%" }}></th>
+          <th scope="col" style={{ width: "30%" }}>
+            {this.props.datas.map((data, i) => {
+              // sum();
+              return <Kcal 칼로리={data.칼로리} />;
+            })}
+          </th>
         </tbody>
       </table>
     );
@@ -210,12 +256,18 @@ class Table extends React.Component {
 }
 
 class Container extends React.Component {
+  // state = {
+  //   result: 0,
+  // };
+
   constructor(props) {
     super(props);
     this.state = { datas: datasByRow, counter: datasByRow.lenght };
     this.onDelete = this.onDelete.bind(this);
     this.onCreate = this.onCreate.bind(this);
   }
+
+  // sum = (e) => {};
 
   onDelete(id) {
     var data_list = this.state.datas;
@@ -232,6 +284,7 @@ class Container extends React.Component {
   }
 
   render() {
+    const { result } = this.state;
     return (
       <div>
         <Inputs onCreate={this.onCreate} getDate={this.props.getDate} />
